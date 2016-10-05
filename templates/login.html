@@ -4,11 +4,22 @@
         <title> Forms! </title>
     </head>
     <body>
-        <form action="/auth" method="POST">
-            <b> username: </b> <input type="text" name="user">
-            <br>
-            <b> password: </b> <input type="text" name="pass">
-            <input type="submit" name="woot">
-        </form>
+        <h3> {{status}} </h3>
+        <h1> If you're a new user, register here! </h1>
+            <form action="/">
+                <b> new username: </b> <input type="text" name="nuser">
+                <br>
+                <b> new password: </b> <input type="text" name="npass">
+                <input type="submit" name="reg">
+            </form>
+        <br>
+        <br>
+        <h2> If you're a old user, use this form! </h2> 
+            <form action="/auth" method="POST">
+                <b> username: </b> <input type="text" name="user">
+                <br>
+                <b> password: </b> <input type="text" name="pass">
+                <input type="submit" name="log">
+            </form>
     </body>
 </html>

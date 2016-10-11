@@ -5,6 +5,12 @@ app = Flask(__name__)
 app.secret_key = '\xceY\x96\x0b^\x8d:\xea\xd2\x9c\xae\xf2\xfc\xdd\x8dL\xf5Dsw\x8a\xcb=\xf8\xf1\xe5\x89K\xbd\x17\x1eg'
 
 @app.route("/")
+def root():
+    for user in session:
+        return redirect(url_for("welcome"))
+    return redirect(url_for("log"))
+
+@app.route("/login")
 def log():
     return render_template("login.html", status = "")
 
@@ -31,10 +37,21 @@ def auth():
     else:
         pas = m[user]
         if pas == hashlib.sha512(request.form['pass']).hexdigest() + "\n":
-            res = "Log in successful."
+            session["user"] = user
+            return redirect(url_for("welcome"))
         else:
             res = "Password is incorrect."
     return render_template("results.html", result = res)
+
+@app.route("/welcome")
+def welcome():
+    return render_template("welcome.html")
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    if "Logout" in request.form:
+        session.pop("user")
+    return redirect(url_for("log"))
 
 def add(user, password):
     old = open("data/passwords.csv", "r")

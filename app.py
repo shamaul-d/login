@@ -1,27 +1,29 @@
-from flask import Flask, render_template, request, session, url_for
+from flask import Flask, render_template, request, session, url_for, redirect
 import hashlib
 
 app = Flask(__name__)
 app.secret_key = '\xceY\x96\x0b^\x8d:\xea\xd2\x9c\xae\xf2\xfc\xdd\x8dL\xf5Dsw\x8a\xcb=\xf8\xf1\xe5\x89K\xbd\x17\x1eg'
 
-@app.route("/", methods=["GET"])
+@app.route("/")
 def log():
-    i = 0
-    for arg in request.args:
-        i += 1
-    if i == 0:
-        stat = ""
-    elif request.args["nuser"] == "" or request.args["npass"] == "":
-        stat = "Please fill in all forms of information."
-    elif not check(request.args["nuser"]):
-        stat = "Username already taken!"
-    else:
-        add(request.args["nuser"],request.args["npass"])
-        stat = "New account created."
-    return render_template("login.html", status = stat)    
+    return render_template("login.html", status = "")
 
 @app.route("/auth", methods=["POST"])
 def auth():
+    i = 0
+    for arg in request.form:
+        i += 1 
+    if i == 0:
+        return render_template("login.html", status = "")
+    if "reg" in request.form: 
+        if request.form["user"] == "" or request.form["pass"] == "":
+            stat = "Please fill in all forms of information."
+        elif not check(request.form["user"]):
+            stat = "Username already taken!"
+        else:
+            add(request.form["user"],request.form["pass"])
+            stat = "New account created."
+        return render_template("login.html", status = stat)
     m = master()
     user = request.form['user']
     if check(user):
